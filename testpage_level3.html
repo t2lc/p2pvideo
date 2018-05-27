@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test page - Level3</title>
+
+    <!-- Video.js build -->
+    <link href="//vjs.zencdn.net/6.6.3/video-js.min.css" rel="stylesheet">
+    <script src="//vjs.zencdn.net/6.6.3/video.min.js"></script>
+
+    <!-- Streamroot source handler plugin -->
+    <script src="//cdn.streamroot.io/videojs-hlsjs-plugin/1/stable/videojs-hlsjs-plugin.js"></script>
+
+    <!-- Streamroot plugin -->
+    <script src="//cdn.streamroot.io/videojs-hls-dna-plugin/1/stable/videojs-hls-dna-plugin.js#streamrootKey=063fd7a6-89a9-4a39-ae17-d72518bf9a78"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="//tools.streamroot.io/usage-graphs/stable/graphs.js"></script>
+
+    <script>
+
+        function createP2p() {
+            var url = window.location.href;
+            var actions = url.split('?');
+
+            if(actions[1]!==undefined){
+                var destination = actions[1].split('=');
+                window.open(actions[0]);
+            }
+        }
+    </script>
+</head>
+<body onload="createP2p();">
+<video id="demoplayer" class="video-js" controls data-setup='{"autoplay": true}'>
+    <source src="http://vod-l3.delivery.streamroot.io/vodOrigin/tos1500.mp4/playlist.m3u8" type="application/x-mpegURL"></video>
+<button id="switchButton" onclick="switchUploadStatus()" style="font-size: 15px; padding: 10px 30px; margin: 30px; border-radius: 5px; color: white; background-color: rgb(160, 0, 73); cursor: pointer; border: none; outline-color: white;">Stop upload</button>
+<div id="streamroot-graphs"></div>
+<script>
+
+    function contentIdFn(contentUrl) {
+        var l = document.createElement("a");
+        l.href = contentUrl;
+        return l.pathname;
+    }
+
+    var dnaConfig = {
+
+    };
+
+
+    var options = {
+        html5: {
+            hlsjsConfig: {},
+            dnaConfig: {
+                "contentIdGenerator" : contentIdFn('http://vod-l3.delivery.streamroot.io/vodOrigin/tos1500.mp4/playlist.m3u8')
+            }
+        }
+    };
+    console.log(options.html5.dnaConfig.contentIdGenerator);
+    var player = videojs("demoplayer", options);
+    function switchUploadStatus(){
+        var status = window.Streamroot.instances[0].dnaUploadEnabled;
+        console.log(status);
+        if (window.Streamroot.instances[0].dnaUploadEnabled===true){
+            window.Streamroot.instances[0].dnaUploadEnabled = false;
+            document.getElementById('switchButton').innerHTML = 'Start upload';
+            document.getElementById('switchButton').style.backgroundColor = 'rgb(253, 133, 10)';
+        }
+        else{
+            window.Streamroot.instances[0].dnaUploadEnabled = true;
+            document.getElementById('switchButton').innerHTML = 'Stop upload';
+            document.getElementById('switchButton').style.backgroundColor = 'rgb(160, 0, 73)';
+        }
+
+    }
+</script>
+
+
+</body>
+</html>
