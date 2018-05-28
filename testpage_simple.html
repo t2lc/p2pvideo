@@ -17,47 +17,20 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="//tools.streamroot.io/usage-graphs/stable/graphs.js"></script>
 
+    <script src="functions.js"></script>
     <script>
-        function createP2p() {
-            var url = window.location.href;
-            var actions = url.split('?');
-
-            if(actions[1]!==undefined){
-                var destination = actions[1].split('=');
-                window.open(actions[0]);
-            }
-        }
+        var streamURL = 'http://vod-l3.delivery.streamroot.io/vodOrigin/tos1500.mp4/playlist.m3u8';
     </script>
+
+
 </head>
-<body onload="createP2p();">
-<video id="demoplayer" class="video-js" controls data-setup='{"autoplay": true}'>
-    <source src="http://vod-l3.delivery.streamroot.io/vodOrigin/tos1500.mp4/playlist.m3u8" type="application/x-mpegURL"></video>
+<body onload="createP2p(); launchPlayer(streamURL)">
+
+<video id="demoplayer" class="video-js" controls data-setup='{"autoplay": true}'></video>
+
 <button id="switchButton" onclick="switchUploadStatus()" style="font-size: 15px; padding: 10px 30px; margin: 30px; border-radius: 5px; color: white; background-color: rgb(160, 0, 73); cursor: pointer; border: none; outline-color: white;">Stop upload</button>
 <div id="streamroot-graphs"></div>
-<script>
-    var options = {
-        html5: {
-            hlsjsConfig: {},
-            dnaConfig: {}
-        }
-    };
-    var player = videojs("demoplayer", options);
-    function switchUploadStatus(){
-        var status = window.Streamroot.instances[0].dnaUploadEnabled;
-        console.log(status);
-        if (window.Streamroot.instances[0].dnaUploadEnabled===true){
-            window.Streamroot.instances[0].dnaUploadEnabled = false;
-            document.getElementById('switchButton').innerHTML = 'Start upload';
-            document.getElementById('switchButton').style.backgroundColor = 'rgb(253, 133, 10)';
-        }
-        else{
-            window.Streamroot.instances[0].dnaUploadEnabled = true;
-            document.getElementById('switchButton').innerHTML = 'Stop upload';
-            document.getElementById('switchButton').style.backgroundColor = 'rgb(160, 0, 73)';
-        }
 
-    }
-</script>
 
 
 </body>
